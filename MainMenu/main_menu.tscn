@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwwjfjsoufsd4"]
+
+[ext_resource type="Script" path="res://MainMenu/QuitBtn.gd" id="1_3luh3"]
+[ext_resource type="Script" path="res://MainMenu/NewGame.gd" id="1_xxjg2"]
+
+[node name="Node2D" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="NewGame" type="Button" parent="."]
+layout_mode = 0
+offset_left = 487.0
+offset_top = 164.0
+offset_right = 710.0
+offset_bottom = 248.0
+theme_override_font_sizes/font_size = 35
+text = "New Game"
+script = ExtResource("1_xxjg2")
+
+[node name="Continue" type="Button" parent="."]
+layout_mode = 0
+offset_left = 488.0
+offset_top = 288.0
+offset_right = 709.0
+offset_bottom = 372.0
+theme_override_font_sizes/font_size = 35
+text = "Continue"
+
+[node name="QuitBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 488.0
+offset_top = 423.0
+offset_right = 706.0
+offset_bottom = 507.0
+theme_override_font_sizes/font_size = 35
+text = "Quit"
+script = ExtResource("1_3luh3")
+
+[connection signal="pressed" from="NewGame" to="NewGame" method="_on_pressed"]
+[connection signal="pressed" from="QuitBtn" to="QuitBtn" method="_on_pressed"]
