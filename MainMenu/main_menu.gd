@@ -12,7 +12,7 @@ func _on_quit_btn_pressed():
 
 # TODO 
 func _on_continue_pressed():
-	pass # Replace with function body.
+	Utils.load_save_game()
 
 # TODO
 func _on_options_pressed():

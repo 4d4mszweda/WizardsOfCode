@@ -46,6 +46,8 @@ text = "link to"
 layout_mode = 2
 text = "link to"
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="GoBack" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "link to"
+text = "Go Back to MainMenu"
+
+[connection signal="pressed" from="VBoxContainer/GoBack" to="." method="_on_go_back_pressed"]
