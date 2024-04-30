@@ -1,3 +1,92 @@
-[gd_scene format=3 uid="uid://bxfn7lld4unje"]
+[gd_scene load_steps=7 format=3 uid="uid://bxfn7lld4unje"]
 
-[node name="ChooseChr" type="Node2D"]
+[ext_resource type="Texture2D" uid="uid://b7wretl6tfysg" path="res://public/chr/python_test.png" id="1_dbk6v"]
+[ext_resource type="Script" path="res://MainMenu/choose_chr.gd" id="1_pcdxx"]
+[ext_resource type="Texture2D" uid="uid://chkvu6hwxxus7" path="res://public/chr/mag.png" id="2_42f4v"]
+
+[sub_resource type="Theme" id="Theme_rhsw8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qy4f4"]
+bg_color = Color(0.556863, 0.596078, 0.733333, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_45sqy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_dbk6v")
+}],
+"loop": true,
+"name": &"python",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_42f4v")
+}],
+"loop": true,
+"name": &"test1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_42f4v")
+}],
+"loop": true,
+"name": &"test2",
+"speed": 5.0
+}]
+
+[node name="ChooseChr" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_pcdxx")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 1155.0
+offset_bottom = 651.0
+theme = SubResource("Theme_rhsw8")
+theme_override_styles/panel = SubResource("StyleBoxFlat_qy4f4")
+
+[node name="Des" type="Label" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = 354.0
+offset_top = 410.0
+offset_right = 594.0
+offset_bottom = 435.0
+
+[node name="PlayerSelect" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(563, 258)
+scale = Vector2(1.76563, 1.76563)
+sprite_frames = SubResource("SpriteFrames_45sqy")
+animation = &"test2"
+
+[node name="ButtonNext" type="Button" parent="."]
+layout_mode = 0
+offset_left = 799.0
+offset_top = 245.0
+offset_right = 846.0
+offset_bottom = 287.0
+text = ">>"
+
+[node name="ButtonPrev" type="Button" parent="."]
+layout_mode = 0
+offset_left = 273.0
+offset_top = 239.0
+offset_right = 320.0
+offset_bottom = 281.0
+text = "<<"
+
+[node name="Select" type="Button" parent="."]
+layout_mode = 0
+offset_left = 476.0
+offset_top = 532.0
+offset_right = 645.0
+offset_bottom = 575.0
+text = "Select"
+
+[connection signal="pressed" from="ButtonNext" to="." method="_on_button_next_pressed"]
+[connection signal="pressed" from="ButtonPrev" to="." method="_on_button_prev_pressed"]
+[connection signal="pressed" from="Select" to="." method="_on_select_pressed"]

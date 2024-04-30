@@ -1,40 +1,61 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwwjfjsoufsd4"]
+[gd_scene load_steps=4 format=3 uid="uid://dwwjfjsoufsd4"]
 
-[ext_resource type="Script" path="res://MainMenu/QuitBtn.gd" id="1_3luh3"]
-[ext_resource type="Script" path="res://MainMenu/NewGame.gd" id="1_xxjg2"]
+[ext_resource type="Script" path="res://MainMenu/main_menu.gd" id="1_dogub"]
 
-[node name="Node2D" type="Control"]
+[sub_resource type="Theme" id="Theme_p3wg7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_banl7"]
+bg_color = Color(0.690196, 0.603922, 0.882353, 1)
+border_color = Color(1, 0.694118, 0.835294, 1)
+border_blend = true
+
+[node name="MainMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_dogub")
 
-[node name="NewGame" type="Button" parent="."]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 487.0
-offset_top = 164.0
-offset_right = 710.0
-offset_bottom = 248.0
+offset_right = 1153.0
+offset_bottom = 644.0
+theme = SubResource("Theme_p3wg7")
+theme_override_styles/panel = SubResource("StyleBoxFlat_banl7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 375.0
+offset_top = 203.0
+offset_right = 747.0
+offset_bottom = 576.0
+theme_override_constants/separation = 20
+
+[node name="NewGame" type="Button" parent="VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "New Game"
-script = ExtResource("1_xxjg2")
 
-[node name="Continue" type="Button" parent="."]
-layout_mode = 0
-offset_left = 488.0
-offset_top = 288.0
-offset_right = 709.0
-offset_bottom = 372.0
+[node name="Continue" type="Button" parent="VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Continue"
 
-[node name="QuitBtn" type="Button" parent="."]
-layout_mode = 0
-offset_left = 488.0
-offset_top = 423.0
-offset_right = 706.0
-offset_bottom = 507.0
+[node name="Options" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Options"
+
+[node name="TestMode" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "TestMode"
+
+[node name="QuitBtn" type="Button" parent="VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 35
 text = "Quit"
-script = ExtResource("1_3luh3")
 
-[connection signal="pressed" from="NewGame" to="NewGame" method="_on_pressed"]
-[connection signal="pressed" from="QuitBtn" to="QuitBtn" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/NewGame" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="VBoxContainer/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="VBoxContainer/TestMode" to="." method="_on_test_mode_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitBtn" to="." method="_on_quit_btn_pressed"]
