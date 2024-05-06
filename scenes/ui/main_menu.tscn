@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=3 uid="uid://c472cr21ufq4h"]
+
+[ext_resource type="Texture2D" uid="uid://dpfqok8tuy4r7" path="res://art/tile_0084.png" id="1_irl7k"]
+[ext_resource type="Script" path="res://scenes/ui/main_menu.gd" id="1_ldinf"]
+[ext_resource type="Texture2D" uid="uid://pgj8vfpj6tc5" path="res://art/tile_0130.png" id="2_amje8"]
+[ext_resource type="Texture2D" uid="uid://c6rme2o6dyaoj" path="res://art/tile_0104.png" id="3_canve"]
+[ext_resource type="Texture2D" uid="uid://bxgrktox5it82" path="res://art/tile_0105.png" id="4_oh7qx"]
+
+[sub_resource type="Gradient" id="Gradient_c5lsg"]
+colors = PackedColorArray(6.13667e-07, 0.231514, 0.0892798, 1, 0, 0.0275253, 0.0723829, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_edghp"]
+gradient = SubResource("Gradient_c5lsg")
+width = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_cqq7b"]
+shadow_color = Color(1, 1, 0, 0.439216)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ldinf")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture1D_edghp")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -56.0
+offset_right = 80.0
+offset_bottom = -39.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Wizard's of Code"
+label_settings = SubResource("LabelSettings_cqq7b")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Continue" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 14)
+layout_mode = 2
+text = "Continue"
+
+[node name="NewRun" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+text = "New Run"
+
+[node name="Exit" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+text = "Exit"
+
+[node name="Wizard" type="Sprite2D" parent="."]
+position = Vector2(32, 96)
+scale = Vector2(2, 2)
+texture = ExtResource("1_irl7k")
+
+[node name="Stuff" type="Sprite2D" parent="."]
+position = Vector2(128, 112)
+scale = Vector2(2, 2)
+texture = ExtResource("2_amje8")
+
+[node name="Sword" type="Sprite2D" parent="."]
+position = Vector2(144, 112)
+rotation = 0.382227
+scale = Vector2(2, 2)
+texture = ExtResource("3_canve")
+
+[node name="Sword2" type="Sprite2D" parent="."]
+position = Vector2(112, 112)
+rotation = -0.359538
+scale = Vector2(2, 2)
+texture = ExtResource("4_oh7qx")
+
+[connection signal="pressed" from="VBoxContainer/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="VBoxContainer/NewRun" to="." method="_on_new_run_pressed"]
+[connection signal="pressed" from="VBoxContainer/Exit" to="." method="_on_exit_pressed"]
