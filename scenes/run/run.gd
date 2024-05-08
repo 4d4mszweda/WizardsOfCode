@@ -4,7 +4,7 @@ extends Node
 const BATTLE_SCENE := preload("res://scenes/battle/battle.tscn")
 const BATTLE_REWORD_SCENE := preload("res://scenes/battle_rewards/battle_rewards.tscn")
 const THERAPY_SCENE := preload("res://scenes/therapy/therapy.tscn")
-const MAP_SCENE := preload("res://scenes/map/map.tscn")
+#const MAP_SCENE := preload("res://scenes/map/map.tscn")
 const SHOP_SCENE := preload("res://scenes/shop/shop.tscn")
 const TREASURE_SCENE := preload("res://scenes/treasure/treasure.tscn")
 
@@ -20,6 +20,8 @@ const TREASURE_SCENE := preload("res://scenes/treasure/treasure.tscn")
 @onready var rewards_button: Button = %RewardsButton
 @onready var theraoy_button: Button = %TherapyButton
 @onready var map_button: Button = %MapButton
+
+@onready var map = $Map
 
 var stats: RunStats
 var character: CharacterStats
@@ -38,7 +40,10 @@ func _start_run() -> void:
 	stats = RunStats.new()
 	_setup_event_connections()
 	_setup_top_bar()
-	print("TODO generate map")
+	map.generate_new_map()
+	map.unlock_floor(0)
+	
+	#TEST
 	#await get_tree().create_timer(3).timeout
 	#stats.gold += 5
 
@@ -50,20 +55,29 @@ func _change_view(scene: PackedScene) -> Node:
 	get_tree().paused = false
 	var new_view := scene.instantiate()
 	current_view.add_child(new_view)
+	map.hide_map()
 	
 	return new_view
 
+func _show_map() -> void:
+	if current_view.get_child_count() > 0:
+		current_view.get_child(0).queue_free()
+	
+	map.show_map()
+	map.unlock_next_rooms()
+	
+
 func _setup_event_connections() -> void:
 	Events.battle_won.connect(_on_battle_won)
-	Events.battle_reward_exited.connect(_change_view.bind(MAP_SCENE))
-	Events.therapy_exited.connect(_change_view.bind(MAP_SCENE))
+	Events.battle_reward_exited.connect(_show_map)
+	Events.therapy_exited.connect(_show_map)
 	Events.map_exited.connect(_on_map_exited)
-	Events.shop_exited.connect(_change_view.bind(MAP_SCENE))
-	Events.treasure_room_exited.connect(_change_view.bind(MAP_SCENE))
+	Events.shop_exited.connect(_show_map)
+	Events.treasure_room_exited.connect(_show_map)
 
 	battle_button.pressed.connect(_change_view.bind(BATTLE_SCENE))
 	theraoy_button.pressed.connect(_change_view.bind(THERAPY_SCENE))
-	map_button.pressed.connect(_change_view.bind(MAP_SCENE))
+	map_button.pressed.connect(_show_map)
 	rewards_button.pressed.connect(_change_view.bind(BATTLE_REWORD_SCENE))
 	shop_button.pressed.connect(_change_view.bind(SHOP_SCENE))
 	treasure_button.pressed.connect(_change_view.bind(TREASURE_SCENE))	
@@ -83,5 +97,22 @@ func _on_battle_won() -> void:
 	reward_scene.add_gold_reward(77)
 	reward_scene.add_card_reward()
 
-func _on_map_exited() -> void:
-	print("TODO: from the map, change view based on room type")
+func _on_map_exited(room: Room) -> void:
+	#_save_run()
+	
+	match room.type:
+		Room.Type.MONSTER:
+			#_on_battle_room_entered(room)
+			_change_view(BATTLE_SCENE)
+		Room.Type.TREASURE:
+			#_on_treasure_room_entered()
+			_change_view(TREASURE_SCENE)
+		Room.Type.CAMPFIRE:
+			#_on_campfire_entered()
+			_change_view(THERAPY_SCENE)
+		Room.Type.SHOP:
+			#_on_shop_entered()
+			_change_view(SHOP_SCENE)
+		Room.Type.BOSS:
+			#_on_battle_room_entered(room)
+			_change_view(BATTLE_SCENE)

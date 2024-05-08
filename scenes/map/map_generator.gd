@@ -21,8 +21,9 @@ var random_room_type_weights = {
 var random_room_type_total_weight := 0
 var map_data: Array[Array]
 
-func _ready():
-	var map = generate_map()
+#TEST
+#func _ready():
+	#var map = generate_map()
 
 func generate_map() -> Array[Array]:
 	map_data = _generate_initial_grid()
@@ -67,7 +68,7 @@ func _generate_initial_grid() -> Array[Array]:
 			
 			# Boss room has a non-random Y
 			if i == FLOORS - 1:
-				print("is this ever called?")
+				#print("is this ever called?")
 				current_room.position.y = (i + 1) * -Y_DIST
 			
 			adjacent_rooms.append(current_room)
