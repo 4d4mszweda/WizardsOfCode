@@ -11,6 +11,7 @@ const TREASURE_SCENE := preload("res://scenes/treasure/treasure.tscn")
 @export var run_startup: RunStartup
 
 @onready var current_view: Node = $CurrentView
+@onready var gold_ui: GoldUi = %GoldUi
 @onready var deck_button: CardPileOpener = %DeckButton
 @onready var deck_view: CardPileView = %DeckView
 @onready var battle_button: Button = %BattleButton
@@ -20,6 +21,7 @@ const TREASURE_SCENE := preload("res://scenes/treasure/treasure.tscn")
 @onready var theraoy_button: Button = %TherapyButton
 @onready var map_button: Button = %MapButton
 
+var stats: RunStats
 var character: CharacterStats
 
 func _ready() -> void:
@@ -33,20 +35,26 @@ func _ready() -> void:
 			print("TODO: load last game")
 		
 func _start_run() -> void:
+	stats = RunStats.new()
 	_setup_event_connections()
 	_setup_top_bar()
 	print("TODO generate map")
+	#await get_tree().create_timer(3).timeout
+	#stats.gold += 5
 
 
-func _change_view(scene: PackedScene) -> void:
+func _change_view(scene: PackedScene) -> Node:
 	if current_view.get_child_count() > 0:
 		current_view.get_child(0).queue_free()
+		
 	get_tree().paused = false
 	var new_view := scene.instantiate()
 	current_view.add_child(new_view)
+	
+	return new_view
 
 func _setup_event_connections() -> void:
-	Events.battle_won.connect(_change_view.bind(BATTLE_REWORD_SCENE))
+	Events.battle_won.connect(_on_battle_won)
 	Events.battle_reward_exited.connect(_change_view.bind(MAP_SCENE))
 	Events.therapy_exited.connect(_change_view.bind(MAP_SCENE))
 	Events.map_exited.connect(_on_map_exited)
@@ -61,9 +69,19 @@ func _setup_event_connections() -> void:
 	treasure_button.pressed.connect(_change_view.bind(TREASURE_SCENE))	
 
 func _setup_top_bar() -> void:
+	gold_ui.run_stats = stats
 	deck_button.card_pile = character.deck
 	deck_view.card_pile = character.deck
 	deck_button.pressed.connect(deck_view.show_current_view.bind("Deck"))
+
+func _on_battle_won() -> void:
+	var reward_scene := _change_view(BATTLE_REWORD_SCENE) as BattleReward
+	reward_scene.run_status = stats
+	reward_scene.character_stats = character
+	
+	#TEMP
+	reward_scene.add_gold_reward(77)
+	reward_scene.add_card_reward()
 
 func _on_map_exited() -> void:
 	print("TODO: from the map, change view based on room type")
