@@ -59,6 +59,14 @@ func _change_view(scene: PackedScene) -> Node:
 	
 	return new_view
 
+func  _on_battle_room_entered(room: Room) -> void:
+	var battle_scene: Battle = _change_view(BATTLE_SCENE) as Battle
+	battle_scene.char_stats = character
+	battle_scene.battle_stats = room.battle_stats
+	#battle_scene.battle_stats = preload("res://battles/tier_0_bats2.tres")
+	battle_scene.start_battle()
+
+
 func _show_map() -> void:
 	if current_view.get_child_count() > 0:
 		current_view.get_child(0).queue_free()
@@ -94,7 +102,7 @@ func _on_battle_won() -> void:
 	reward_scene.character_stats = character
 	
 	#TEMP
-	reward_scene.add_gold_reward(77)
+	reward_scene.add_gold_reward(map.last_room.battle_stats.roll_gold_reward())
 	reward_scene.add_card_reward()
 
 func _on_map_exited(room: Room) -> void:
@@ -102,8 +110,8 @@ func _on_map_exited(room: Room) -> void:
 	
 	match room.type:
 		Room.Type.MONSTER:
-			#_on_battle_room_entered(room)
-			_change_view(BATTLE_SCENE)
+			_on_battle_room_entered(room)
+			#_change_view(BATTLE_SCENE)
 		Room.Type.TREASURE:
 			#_on_treasure_room_entered()
 			_change_view(TREASURE_SCENE)
@@ -114,5 +122,5 @@ func _on_map_exited(room: Room) -> void:
 			#_on_shop_entered()
 			_change_view(SHOP_SCENE)
 		Room.Type.BOSS:
-			#_on_battle_room_entered(room)
-			_change_view(BATTLE_SCENE)
+			_on_battle_room_entered(room)
+			#_change_view(BATTLE_SCENE)
