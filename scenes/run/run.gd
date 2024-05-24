@@ -20,6 +20,7 @@ const TREASURE_SCENE := preload("res://scenes/treasure/treasure.tscn")
 @onready var rewards_button: Button = %RewardsButton
 @onready var theraoy_button: Button = %TherapyButton
 @onready var map_button: Button = %MapButton
+@onready var health: HealthUI = %HealthUI
 
 @onready var map = $Map
 
@@ -66,6 +67,9 @@ func  _on_battle_room_entered(room: Room) -> void:
 	#battle_scene.battle_stats = preload("res://battles/tier_0_bats2.tres")
 	battle_scene.start_battle()
 
+func _on_campfire_entered() -> void:
+	var campfire := _change_view(THERAPY_SCENE) as Campfire
+	campfire.char_stats = character
 
 func _show_map() -> void:
 	if current_view.get_child_count() > 0:
@@ -74,6 +78,14 @@ func _show_map() -> void:
 	map.show_map()
 	map.unlock_next_rooms()
 	
+func _on_treasure_entered() -> void:
+	var reward_scene := _change_view(BATTLE_REWORD_SCENE) as BattleReward
+	reward_scene.run_status = stats
+	reward_scene.character_stats = character
+	
+	reward_scene.add_gold_reward(100)
+	reward_scene.add_card_reward()
+	reward_scene.add_card_reward()
 
 func _setup_event_connections() -> void:
 	Events.battle_won.connect(_on_battle_won)
@@ -91,6 +103,8 @@ func _setup_event_connections() -> void:
 	treasure_button.pressed.connect(_change_view.bind(TREASURE_SCENE))	
 
 func _setup_top_bar() -> void:
+	character.stats_changed.connect(health.update_stats.bind(character))
+	health.update_stats(character)
 	gold_ui.run_stats = stats
 	deck_button.card_pile = character.deck
 	deck_view.card_pile = character.deck
@@ -114,10 +128,10 @@ func _on_map_exited(room: Room) -> void:
 			#_change_view(BATTLE_SCENE)
 		Room.Type.TREASURE:
 			#_on_treasure_room_entered()
-			_change_view(TREASURE_SCENE)
+			_on_treasure_entered()
 		Room.Type.CAMPFIRE:
-			#_on_campfire_entered()
-			_change_view(THERAPY_SCENE)
+			_on_campfire_entered()
+			#_change_view(THERAPY_SCENE)
 		Room.Type.SHOP:
 			#_on_shop_entered()
 			_change_view(SHOP_SCENE)
