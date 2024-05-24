@@ -18,6 +18,7 @@ run_startup = ExtResource("2_tw0mj")
 [node name="CurrentView" type="Node" parent="."]
 
 [node name="DebugBtn" type="VBoxContainer" parent="."]
+visible = false
 anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
